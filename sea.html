@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【红牌公示】关于山海寄庐工作室违规用电的通报 - 江城科技园物业论坛</title>
+    <style>
+        /* 基础重置与论坛风格背景 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        body { background-color: #e9ecef; color: #333; line-height: 1.6; }
+        a { text-decoration: none; color: #0056b3; }
+        a:hover { text-decoration: underline; }
+
+        /* 顶部导航 */
+        .forum-header {
+            background-color: #fff;
+            border-bottom: 2px solid #0056b3;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        .forum-logo { font-size: 22px; font-weight: bold; color: #0056b3; }
+        .forum-nav { font-size: 14px; color: #666; }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            max-width: 1000px;
+            margin: 20px auto 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* 帖子主体容器 */
+        .post-container {
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* 楼主（官方通告）区域 */
+        .post-main {
+            display: flex;
+            border-bottom: 10px solid #e9ecef;
+        }
+        
+        /* 左侧用户信息栏 */
+        .user-sidebar {
+            width: 180px;
+            background: #f8f9fa;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+        }
+        .avatar { width: 80px; height: 80px; background: #dc3545; color: #fff; line-height: 80px; font-size: 24px; font-weight: bold; border-radius: 5px; margin: 0 auto 10px; }
+        .username { font-weight: bold; color: #dc3545; font-size: 15px; margin-bottom: 5px; }
+        .user-title { font-size: 12px; color: #fff; background: #dc3545; padding: 2px 5px; border-radius: 3px; display: inline-block; }
+
+        /* 右侧正文区域 */
+        .post-content-area {
+            flex: 1;
+            padding: 30px;
+            position: relative;
+        }
+        .post-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #212529;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .badge-red { background: #dc3545; color: #fff; font-size: 12px; padding: 3px 8px; border-radius: 3px; font-weight: normal; }
+        
+        .post-meta { font-size: 12px; color: #999; margin-bottom: 20px; }
+
+        /* 正文排版 */
+        .post-body { font-size: 15px; color: #333; text-align: justify; }
+        .post-body p { margin-bottom: 15px; }
+        
+        /* 官方红头文件式高亮框 */
+        .official-notice {
+            border: 2px solid #dc3545;
+            background-color: #fff8f8;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .official-notice h3 { color: #dc3545; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #f5c6cb; padding-bottom: 5px; }
+        .official-notice ul { margin-left: 20px; margin-bottom: 15px; }
+        .official-notice li { margin-bottom: 8px; }
+
+        /* CSS绘制的虚拟印章 */
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            border: 4px solid rgba(220, 53, 69, 0.4);
+            border-radius: 50%;
+            color: rgba(220, 53, 69, 0.4);
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 110px;
+            transform: rotate(-25deg);
+            pointer-events: none;
+            user-select: none;
+            letter-spacing: 2px;
+        }
+        .stamp::after {
+            content: '★';
+            position: absolute;
+            top: -25px;
+            left: 0;
+            width: 100%;
+            font-size: 30px;
+        }
+
+        /* 回复楼层区域 (补充剧情细节) */
+        .reply-item {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        .reply-item:last-child { border-bottom: none; }
+        .reply-sidebar { width: 180px; background: #fdfdfd; border-right: 1px solid #ddd; padding: 20px; text-align: center; }
+        .reply-avatar { width: 60px; height: 60px; background: #6c757d; color: #fff; line-height: 60px; font-size: 20px; border-radius: 50%; margin: 0 auto 10px; }
+        .reply-name { font-size: 13px; font-weight: bold; color: #495057; }
+        .reply-content { flex: 1; padding: 20px 30px; font-size: 14px; color: #444; }
+        .reply-meta { font-size: 12px; color: #999; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="forum-header">
+        <div class="forum-logo">江城科技园 - 物业官方论坛</div>
+        <div class="forum-nav">欢迎您，游客 | <a href="#">登录</a> | <a href="#">注册</a></div>
+    </div>
+
+    <div class="breadcrumb">
+        首页 &gt; 园区公告 &gt; 物业曝光台 &gt; 正文详情
+    </div>
+
+    <div class="post-container">
+        <!-- 楼主：官方通告 -->
+        <div class="post-main">
+            <div class="user-sidebar">
+                <div class="avatar">安</div>
+                <div class="username">园区安全办</div>
+                <div class="user-title">管理员 (Admin)</div>
+            </div>
+            
+            <div class="post-content-area">
+                <div class="post-title">
+                    <span class="badge-red">置顶公示</span> 
+                    【红牌通报】关于B区4栋地下04号单元（山海寄庐工作室）违规高危用电的查处结果
+                </div>
+                <div class="post-meta">发表于 2026-07-01 09:30:15 | 阅读: 14,208 | 回复: 12</div>
+                
+                <div class="post-body">
+                    <p>各位园区租户、企业负责人：</p>
+                    <p>近期，园区智能电网主控系统连续多日发出高压负载警报。经后勤工程部排查，警报源头锁定为 <strong>B区4栋地下04号仓库</strong>。现将相关查处情况通报如下：</p>
+
+                    <div class="official-notice">
+                        <div class="stamp">违规断电</div>
+                        <h3>查处详情简报</h3>
+                        <ul>
+                            <li><strong>登记承租方：</strong>山海寄庐艺术工作室（法人/紧急联系人：陈*秋）</li>
+                            <li><strong>违规事由：</strong>该单元出现极度异常的工业级用电过载。其日均耗电量高达 400 度（月累计超 12,000 度），严重超出地下室民商两用电网的物理极值，极易引发园区大面积停电及火灾。</li>
+                            <li><strong>现场勘验报告：</strong>6月30日晚，物业联合消防队现场强制破门勘验。该门店内并无画架、画布等任何艺术创作工具。其内部已被私自改造为由 24 组级联排风扇组成的重度散热矩阵，以及一台永不关机的高算力定制服务器机柜。</li>
+                            <li><strong>处置结果：</strong>因多次联系承租人未果，且该处硬件资产涉及复杂的数据接口，目前该物理节点的电源总控与外网路由，已由科技园底层网络提供商强行接管并实施动态监控。</li>
+                        </ul>
+                    </div>
+
+                    <p>安全无小事！严禁任何企业及个人在普通办公区私自搭建“矿场”、超算中心或私接高压工业电网。一经发现，物业将直接拉闸并上报相关部门。</p>
+                    <p>江城创意科技园 后勤与安全保卫处<br>2026年7月1日</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1楼回复 (补充玩家视角的剧情细节) -->
+        <div class="reply-item">
+            <div class="reply-sidebar">
+                <div class="reply-avatar">邻</div>
+                <div class="reply-name">隔壁老王包装厂</div>
+            </div>
+            <div class="reply-content">
+                <div class="reply-meta">1楼 | 发表于 2026-07-01 10:15:22</div>
+                <p>大快人心！早就该查了！我租在地下03号，隔壁那个所谓的“画室”平时根本不见有人进出。最恐怖的是，一到下半夜，那个房间里就传出巨大的“嗡嗡嗡”的风扇轰鸣声，吵得人根本没法睡觉。我还以为他们在里面造飞机呢！</p>
+            </div>
+        </div>
+
+        <!-- 2楼回复 (点醒玩家：原来连麦时的雨声是假的) -->
+        <div class="reply-item">
+            <div class="reply-sidebar">
+                <div class="reply-avatar">电</div>
+                <div class="reply-name">园区电工老李</div>
+            </div>
+            <div class="reply-content">
+                <div class="reply-meta">2楼 | 发表于 2026-07-01 11:05:40</div>
+                <p>昨晚破门我也在场。里面简直是个大冰窖，为了给那台机器散热，空调开到了最低，墙上全贴满了录音棚级别的高密度隔音海绵。我就纳闷了，服务器噪音再大，至于搞得像个完全真空的静音室一样吗？这人是不是有什么精神强迫症，或者是在里面录什么不能让人听见杂音的东西？</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

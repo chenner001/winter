@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Release Notes - 态势感知引擎 v4.0</title>
+    <style>
+        /* 终端极客风格重置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, 'PingFang SC', monospace; }
+        body { 
+            background-color: #050508; 
+            color: #8be9fd; 
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* 终端窗口 */
+        .terminal-window {
+            width: 100%;
+            max-width: 850px;
+            background: rgba(10, 10, 15, 0.85);
+            border: 1px solid #6272a4;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 10px rgba(0,240,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 终端头部 */
+        .terminal-header {
+            background: #1e1e2e;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #6272a4;
+        }
+        .window-controls { display: flex; gap: 8px; margin-right: 20px; }
+        .control-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background-color: #ff5555; }
+        .dot-yellow { background-color: #f1fa8c; }
+        .dot-green { background-color: #50fa7b; }
+        .window-title { color: #6272a4; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+
+        /* 内容区 */
+        .content {
+            padding: 30px 40px;
+            overflow-y: auto;
+            color: #f8f8f2;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        h1 { color: #50fa7b; font-size: 22px; margin-bottom: 5px; border-bottom: 1px dashed #6272a4; padding-bottom: 10px; }
+        .release-date { color: #6272a4; font-size: 12px; margin-bottom: 30px; }
+
+        h2 { color: #bd93f9; font-size: 16px; margin-top: 25px; margin-bottom: 15px; }
+
+        ul { list-style-type: none; margin-bottom: 20px; }
+        li { margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+        li::before { content: "►"; color: #00f0ff; font-weight: bold; }
+
+        .tag-add { color: #50fa7b; font-weight: bold; }
+        .tag-fix { color: #ffb86c; font-weight: bold; }
+        .tag-opt { color: #8be9fd; font-weight: bold; }
+
+        code { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 3px; color: #ff79c6; }
+        .highlight { color: #ff5555; font-weight: bold; }
+
+        /* 开发者备忘区 */
+        .dev-notes {
+            margin-top: 40px;
+            background: rgba(98, 114, 164, 0.1);
+            border-left: 4px solid #f1fa8c;
+            padding: 15px 20px;
+            color: #f1fa8c;
+        }
+        .dev-notes-title { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; color: #f1fa8c;}
+        .dev-notes-title::before { content: '⚠️'; font-size: 16px; }
+        .comment-text { color: #6272a4; font-style: italic; }
+        
+        /* 极致隐蔽的秘密数据层 */
+        .secret-data {
+            /* 移除所有显眼的背景色、边框和内边距，完全伪装成一行空白 */
+            margin-top: 15px;
+            font-family: monospace;
+            cursor: text;
+            /* 核心：文字颜色设置透明，在未被选中时绝对不可见 */
+            color: transparent; 
+        }
+
+        /* 选中状态：暗文显现 */
+        .secret-data::selection, .secret-data *::selection {
+            background: #ff5555;
+            color: #000;
+            text-shadow: none;
+        }
+        .secret-data::-moz-selection, .secret-data *::-moz-selection {
+            background: #ff5555;
+            color: #000;
+            text-shadow: none;
+        }
+
+        /* 底部操作 */
+        .actions {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .btn-close {
+            background: transparent; border: 1px solid #00f0ff; color: #00f0ff; 
+            padding: 8px 30px; cursor: pointer; transition: all 0.3s; font-size: 14px;
+        }
+        .btn-close:hover { background: #00f0ff; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-window">
+        <!-- 窗口栏 -->
+        <div class="terminal-header">
+            <div class="window-controls">
+                <div class="control-dot dot-red"></div>
+                <div class="control-dot dot-yellow"></div>
+                <div class="control-dot dot-green"></div>
+            </div>
+            <div class="window-title">jc_cloud_release_notes.md - VIM</div>
+        </div>
+
+        <!-- 正文内容 -->
+        <div class="content">
+            <h1>态势感知引擎 v4.0 更新日志 (Release Notes)</h1>
+            <div class="release-date">发布时间: 2026-06-01 10:00:00 | 节点: 全网同步推送</div>
+
+            <h2># 新增特性 (New Features)</h2>
+            <ul>
+                <li><span class="tag-add">[新增]</span> 深度资产扫描：新增对“超大参数情感计算模型”运行状态的监控支持，可实时追踪沙盒内的数据溢出。</li>
+                <li><span class="tag-add">[新增]</span> 物理机房映射：将 B区4栋、C区等地下机房的物理耗电量接入仪表盘。</li>
+                <li><span class="tag-add">[新增]</span> 紧急熔断协议：当检测到虚拟容器逃逸风险时，允许管理员远程拉闸断电。</li>
+            </ul>
+
+            <h2># 修复与优化 (Bug Fixes & Optimizations)</h2>
+            <ul>
+                <li><span class="tag-fix">[修复]</span> 修复了 <code>Grid_Power_Failure</code> 报错时，备份节点无法自动上线的问题。</li>
+                <li><span class="tag-fix">[修复]</span> 修复了检索结果偶发性 502 Bad Gateway 的网络波动。</li>
+                <li><span class="tag-opt">[优化]</span> 移除了普通游客的检索权限。自 v4.0 起，全网扫描必须依赖管理员 Token 进行鉴权。</li>
+            </ul>
+
+            <!-- 核心剧透区域：防源码审查的密码区 -->
+            <div class="dev-notes">
+                <div class="dev-notes-title">内部开发者备忘 (Internal Dev Notes) - 阅后即焚</div>
+                <p class="comment-text">// @张工：因为刚加了权限校验，外包运维团队那边抱怨说新版本的鉴权 API 老是调不通，没法测试机房的网段扫描。</p>
+                <p class="comment-text">// 没办法，为了不卡周五的进度，我先在前端验证逻辑里写死了一套硬编码的后门，给他们临时提权用。下周一发 v4.0.1 补丁的时候我再删掉！！！</p>
+                
+                <!-- 空白占位符，由 JS 注入解密后的数据 -->
+                <div class="secret-data" id="classifiedVault"></div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-close" id="closeWinBtn">[ 关闭窗口 / 返回主域 ]</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 
+        //
+        const _0xData = "VXNlcm5hbWUgOiBhZG1pbjxicj5QYXNzd29yZCA6IGpjX2Nsb3VkXzIwMjY=";
+        
+        // 页面加载完成后静默解密并渲染到透明区块中
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('classifiedVault').innerHTML = atob(_0xData);
+        });
+
+        const closeBtn = document.getElementById('closeWinBtn');
+        closeBtn.addEventListener('click', () => {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.close();
+            }
+        });
+    </script>
+</body>
+</html>

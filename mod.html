@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vapor 社区 : 北极星物语</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #171a21; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* 禁用外部滚动条，交由内部 vapor-content 滚动 */
+        }
+
+        /* --- Vapor 内容区 --- */
+        .vapor-content {
+            flex-grow: 1;
+            height: 100vh;
+            background: radial-gradient(circle at top center, #2a475e 0%, #1b2838 50%, #171a21 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            color: #c7d5e0;
+        }
+        
+        /* 自定义滚动条 */
+        .vapor-content::-webkit-scrollbar { width: 12px; }
+        .vapor-content::-webkit-scrollbar-track { background: #171a21; }
+        .vapor-content::-webkit-scrollbar-thumb { background-color: #384959; border-radius: 6px; border: 3px solid #171a21; }
+        .vapor-content::-webkit-scrollbar-thumb:hover { background-color: #4c6b82; }
+
+        /* Vapor 全局导航 */
+        .vapor-global-header { background-color: #171a21; padding: 0 40px; height: 80px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .vapor-header-inner { width: 100%; max-width: 980px; display: flex; align-items: center; justify-content: space-between; }
+        .vapor-logo { font-size: 24px; font-weight: bold; color: #dfdfdf; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .vapor-logo-icon { width: 26px; height: 26px; background: linear-gradient(-45deg, #000, #3a3a3a); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid #dfdfdf; font-size: 12px; }
+        .vapor-global-nav { display: flex; gap: 20px; text-transform: uppercase; font-size: 13px; font-weight: 600; }
+        .vapor-global-nav a { color: #d1d1d1; text-decoration: none; transition: color 0.2s; }
+        .vapor-global-nav a:hover, .vapor-global-nav a.active { color: #66c0f4; }
+        .vapor-user-actions { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+
+        /* 游戏专属 Header */
+        .game-header-area {
+            max-width: 980px; margin: 0 auto; width: 100%; padding: 20px 0; flex-grow: 1;
+        }
+        .game-title-row {
+            display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px;
+        }
+        .game-title { font-size: 26px; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .game-tabs { display: flex; gap: 5px; }
+        .g-tab { background: rgba(103, 193, 245, 0.2); color: #66c0f4; padding: 6px 15px; font-size: 14px; border-radius: 3px 3px 0 0; cursor: pointer; }
+        .g-tab.active { background: #1b2838; border-top: 2px solid #66c0f4; color: #fff; }
+
+        /* 游戏大图区域 */
+        .game-hero {
+            width: 100%; height: 280px; background-color: #000; position: relative;
+            border-radius: 4px; overflow: hidden; margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .game-hero img {
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.9;
+        }
+        .hero-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+            padding: 20px; display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .hero-info .title { font-size: 20px; color: #fff; margin-bottom: 8px; font-weight: bold; }
+        .hero-info .desc { font-size: 13px; color: #acb2b8; max-width: 600px; line-height: 1.5; }
+        .play-btn {
+            background: linear-gradient(to bottom, #799905 5%, #536904 95%);
+            color: #d2efa9; padding: 10px 30px; font-size: 16px; border-radius: 2px;
+            cursor: pointer; border: none; font-weight: bold;
+        }
+        .play-btn:hover { background: linear-gradient(to bottom, #8ed029 5%, #5a851a 95%); color: #fff; }
+
+        /* 创意工坊区域 */
+        .workshop-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px; border-radius: 4px;
+        }
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 20px;
+        }
+        .section-title { font-size: 18px; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .section-title span { color: #66c0f4; font-size: 14px; cursor: pointer; }
+
+        /* MOD 列表网格 */
+        .mod-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
+        }
+        
+        .mod-card {
+            background: #171a21; border-radius: 3px; overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); border: 1px solid transparent;
+            transition: all 0.2s; cursor: pointer; display: flex; flex-direction: column;
+        }
+        .mod-card:hover { border-color: #66c0f4; transform: scale(1.02); }
+        
+        /* 隐藏男主专属 MOD 的特殊动画 */
+        .mod-card.special-mod:hover {
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.3); border-color: #ff9900;
+        }
+
+        .mod-img {
+            width: 100%; height: 140px; background: #2a475e; position: relative;
+        }
+        .mod-img img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .mod-info { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+        .mod-title { font-size: 15px; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mod-author { font-size: 12px; color: #8f98a0; margin-bottom: 12px; }
+        
+        .mod-rating { display: flex; gap: 2px; margin-bottom: 8px; }
+        .star { width: 12px; height: 12px; background: #66c0f4; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+        .star.dim { background: #384959; }
+
+        .mod-stats { display: flex; justify-content: space-between; font-size: 11px; color: #8f98a0; margin-top: auto; }
+        .subscribe-badge { background: #334d22; color: #88c057; padding: 2px 6px; border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+    <div class="vapor-content">
+        
+        <!-- 顶部导航 -->
+        <div class="vapor-global-header">
+            <div class="vapor-header-inner">
+                <div class="vapor-logo"><div class="vapor-logo-icon">V</div> VAPOR</div>
+                <div class="vapor-global-nav">
+                    <a href="#">商店</a>
+                    <a href="#" class="active">社区</a>
+                    <a href="#">关于</a>
+                </div>
+                <div class="vapor-user-actions">
+                    <span style="color: #66c0f4;">极夜</span>
+                    <div style="width:24px;height:24px;background:#4c6b82;border-radius:2px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="game-header-area">
+            <div class="game-title-row">
+                <div class="game-title">北极星物语 (Polaris Story)</div>
+                <div class="game-tabs">
+                    <div class="g-tab">所有</div>
+                    <div class="g-tab">讨论</div>
+                    <div class="g-tab">截图</div>
+                    <div class="g-tab active">创意工坊</div>
+                    <div class="g-tab">新闻</div>
+                </div>
+            </div>
+
+            <!-- 游戏顶部大图 -->
+            <div class="game-hero">
+                <img src="北极星物语.jpg" alt="北极星物语" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\'%3E%3Crect width=\'100%\' height=\'100%\' fill=\'%232a475e\'/%3E%3Ctext x=\'50%\' y=\'50%\' font-size=\'24\' fill=\'%23fff\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3E北极星物语.png%3C/text%3E%3C/svg%3E'">
+                <div class="hero-overlay">
+                    <div class="hero-info">
+                        <div class="title">创意工坊：创造你的星空物语</div>
+                        <div class="desc">浏览、下载并评价玩家社区制作的模组。无论是新的农作物、建筑图纸，还是全新的冒险岛屿，创意工坊都能为你带来无限可能。</div>
+                    </div>
+                    <button class="play-btn">马上开玩</button>
+                </div>
+            </div>
+
+            <!-- 创意工坊 Mod 列表 -->
+            <div class="workshop-section">
+                <div class="section-header">
+                    <div class="section-title">最热门物品 <span>浏览全部 14,203 个物品</span></div>
+                    <div style="font-size:13px; color:#8f98a0; cursor:pointer;">按一周热门排序 ▼</div>
+                </div>
+
+                <div class="mod-grid">
+                    
+                    <!-- 普通 MOD 1 -->
+                    <div class="mod-card">
+                        <div class="mod-img"><div style="width:100%;height:100%;background:linear-gradient(135deg, #3d5b4a, #1a2a22);"></div></div>
+                        <div class="mod-info">
+                            <div class="mod-title">更多农作物扩展包 v2.0</div>
+                            <div class="mod-author">作者：Farmer_John</div>
+                            <div class="mod-rating">
+                                <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            </div>
+                            <div class="mod-stats">
+                                <span>2.4M 订阅</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 普通 MOD 2 -->
+                    <div class="mod-card">
+                        <div class="mod-img"><div style="width:100%;height:100%;background:linear-gradient(135deg, #5b4d3d, #2a211a);"></div></div>
+                        <div class="mod-info">
+                            <div class="mod-title">高清材质替换 (4K HD Textures)</div>
+                            <div class="mod-author">作者：PixelMaster</div>
+                            <div class="mod-rating">
+                                <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star dim"></div>
+                            </div>
+                            <div class="mod-stats">
+                                <span>1.8M 订阅</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 核心剧情 MOD：陈屿秋为女主建立的避风港 -->
+                    <!-- 交互：点击跳转，附带加密路由 -->
+                    <div class="mod-card special-mod" onclick="sysRedirect(event, '0x626966656e6767616e672e68746d6c')">
+                        <div class="mod-img">
+                            <!-- 纯色渐变模拟星空封面 -->
+                            <div style="width:100%;height:100%;background:linear-gradient(to bottom, #0f1626, #2d1c3a);">
+                                <div style="position:absolute; top:20px; left:40px; width:2px; height:2px; background:#fff; box-shadow:0 0 5px #fff;"></div>
+                                <div style="position:absolute; top:50px; right:30px; width:3px; height:3px; background:#fff; box-shadow:0 0 8px #fff;"></div>
+                            </div>
+                        </div>
+                        <div class="mod-info">
+                            <div class="mod-title">郁冬的避风港 (Haven)</div>
+                            <div class="mod-author" style="color: #ff9900;">作者：屿秋 (QY)</div>
+                            <div class="mod-rating">
+                                <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            </div>
+                            <div class="mod-stats">
+                                <span class="subscribe-badge">✓ 已订阅</span>
+                                <span>仅限好友</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 普通 MOD 3 -->
+                    <div class="mod-card">
+                        <div class="mod-img"><div style="width:100%;height:100%;background:linear-gradient(135deg, #3d4f5b, #1a252a);"></div></div>
+                        <div class="mod-info">
+                            <div class="mod-title">一键快速整理箱子</div>
+                            <div class="mod-author">作者：LazyCoder</div>
+                            <div class="mod-rating">
+                                <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            </div>
+                            <div class="mod-stats">
+                                <span>3.1M 订阅</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 加密跳转脚本 -->
+    <script>
+        function sysRedirect(event, token) {
+            event.preventDefault(); 
+            
+            // 安全校验：确认是否为内部十六进制令牌
+            if (!token || !token.startsWith('0x')) {
+                return;
+            }
+            
+            // Hex 逆向解密引擎，还原目标地址 (bifenggang.html)
+            let destUrl = '';
+            let hexSequence = token.substring(2);
+            for (let i = 0; i < hexSequence.length; i += 2) {
+                destUrl += String.fromCharCode(parseInt(hexSequence.substr(i, 2), 16));
+            }
+            
+            // 执行内部重定向，开启新标签页
+            window.open(destUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
