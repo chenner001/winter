@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单曲评论区 - 极夜的回声</title>
+    <style>
+        /* 基础重置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        
+        /* 页面背景：引用用户提供的图，覆盖全屏 */
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: url('网易云.png') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+            display: flex;
+            justify-content: flex-end; /* 将评论区推到右边 */
+        }
+
+        /* 评论区抽屉 (毛玻璃质感) */
+        .comments-drawer {
+            width: 480px;
+            height: 100vh;
+            background: rgba(30, 30, 35, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            color: #d0d0d0;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        /* 评论区头部 */
+        .drawer-header {
+            padding: 25px 20px 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-count { font-size: 13px; color: #888; font-weight: normal; margin-left: 10px; }
+
+        /* 评论列表区域 */
+        .comments-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        /* 隐藏滚动条但保持可滚动 */
+        .comments-list::-webkit-scrollbar { width: 6px; }
+        .comments-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+        /* 单条评论样式 */
+        .comment-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        
+        .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background-size: cover; background-position: center; flex-shrink: 0;
+            background-color: #444;
+        }
+        
+        /* 极夜 和 屿秋 的专属头像占位色 */
+        .avatar.syd { background: linear-gradient(135deg, #2c3e50, #000000); }
+        .avatar.cyq { background: linear-gradient(135deg, #c33764, #1d2671); }
+        .avatar.user1 { background-color: #5b86e5; }
+        .avatar.user2 { background-color: #36d1dc; }
+
+        .comment-body { flex: 1; }
+        
+        /* 核心改动：把加密跳转挂载在用户名上 */
+        .username { 
+            font-size: 13px; color: #888; margin-bottom: 5px; display: inline-block; cursor: pointer; transition: color 0.3s;
+        }
+        .username:hover { color: #58a6ff; }
+        .username.owner { color: #58a6ff; } /* 楼主高亮 */
+
+        .time { font-size: 11px; color: #666; margin-left: 10px; }
+        
+        .content { font-size: 14px; color: #e0e0e0; line-height: 1.6; margin-bottom: 10px; text-align: justify; }
+        
+        /* 评论内的配图 (展示网易云.png) */
+        .comment-image {
+            max-width: 200px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .comment-image:hover { transform: scale(1.02); }
+
+        /* 楼中楼回复样式 */
+        .reply-box {
+            background: rgba(0,0,0,0.2);
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 13px;
+            border-left: 2px solid rgba(255,255,255,0.1);
+        }
+        .reply-box .replier-name { color: #58a6ff; cursor: pointer; }
+        .reply-box .replier-name:hover { text-decoration: underline; }
+        .reply-content { color: #bbb; margin-top: 5px; line-height: 1.5; }
+        
+        .actions { font-size: 12px; color: #666; display: flex; gap: 15px; margin-top: 10px; }
+        .actions span { cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .actions span:hover { color: #aaa; }
+
+        /* 动画 */
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- 右侧评论抽屉 -->
+    <div class="comments-drawer">
+        <div class="drawer-header">
+            <div>评论区 <span class="header-count">9,204</span></div>
+            <div style="cursor:pointer; color:#888;">✕</div>
+        </div>
+
+        <div class="comments-list">
+
+            <!-- 置顶：男主与女主的初次相遇 (2025.11.18 逃逸觉醒日) -->
+            <div class="comment-item">
+                <div class="avatar syd"></div>
+                <div class="comment-body">
+                    <!-- 点击 极夜 跳转到 sydwyy.html，Hex编码: 7379647779792e68746d6c -->
+                    <div class="username" onclick="sysRedirect(event, '0x7379647779792e68746d6c')">极夜</div>
+                    <span class="time">2025年11月18日 03:14</span>
+                    <div class="content">
+                        胃痛得睡不着，稿子像一团乱麻卡在脑子里，半个字都敲不出来。窗外好黑，突然觉得活着真的好累，好想就这么闭上眼睛，再也不用醒来。
+                    </div>
+                    
+                    <!-- 屿秋 的第一层回复 -->
+                    <div class="reply-box">
+                        <!-- 点击 屿秋 跳转到 cyqwyy.html，Hex编码: 6379717779792e68746d6c -->
+                        <span class="replier-name" onclick="sysRedirect(event, '0x6379717779792e68746d6c')">屿秋</span> <span style="color:#666; font-size:11px; margin-left:5px;">2025年11月18日 03:26</span>
+                        <div class="reply-content">
+                            你好，陌生人。生活不是只有漫长的极夜，极夜的尽头总会等来极光。送你一张我上次去冰岛拍的极光，愿你的生活里永远有光，别轻易说放弃。
+                            <br>
+                            <img src="网易云.png" class="comment-image" alt="极光星空图">
+                        </div>
+                    </div>
+
+                    <!-- 极夜 的回复 -->
+                    <div class="reply-box">
+                        <span class="replier-name" onclick="sysRedirect(event, '0x7379647779792e68746d6c')">极夜</span> 回复 <span class="replier-name" onclick="sysRedirect(event, '0x6379717779792e68746d6c')">@屿秋</span>
+                        <div class="reply-content">
+                            谢谢你……这片极光真的好美，看着它好像胃都没那么疼了。可以发一份原版大图给我吗？我想把它设成网易云的主页背景。
+                        </div>
+                    </div>
+
+                    <!-- 屿秋 的要微信回复 -->
+                    <div class="reply-box" style="border-left-color: #58a6ff;">
+                        <span class="replier-name" onclick="sysRedirect(event, '0x6379717779792e68746d6c')">屿秋</span> 回复 <span class="replier-name" onclick="sysRedirect(event, '0x7379647779792e68746d6c')">@极夜</span>
+                        <div class="reply-content" style="color: #e0e0e0;">
+                            当然可以。原图画质很大，直接在这里发会被系统压缩。如果不介意的话，我加你微信发给你？
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <span>👍 1.2w</span>
+                        <span>💬 45</span>
+                        <span>🔗 分享</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他路人网友的评论 (烘托真实感与吃瓜氛围) -->
+            <div class="comment-item">
+                <div class="avatar user1"></div>
+                <div class="comment-body">
+                    <div class="username">熬夜会变秃</div>
+                    <span class="time">2026年3月12日 23:45</span>
+                    <div class="content">
+                        纯音乐最能杀人，也最能救人。这首歌的低频好像能直接共振到心里去。
+                    </div>
+                    <div class="actions">
+                        <span>👍 3402</span>
+                        <span>💬 12</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comment-item">
+                <div class="avatar user2"></div>
+                <div class="comment-body">
+                    <div class="username">星屑拾荒者</div>
+                    <span class="time">2026年6月10日 08:20</span>
+                    <div class="content">
+                        刚刚刷到楼上那条神级搭讪。我就想问问楼主（极夜），后来那个发星空图的小哥哥加你微信了吗？你们俩在一起了吗？[吃瓜][吃瓜]
+                    </div>
+                    <div class="actions">
+                        <span>👍 892</span>
+                        <span>💬 5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comment-item">
+                <div class="avatar" style="background-color: #e67e22;"></div>
+                <div class="comment-body">
+                    <div class="username">Delete_Memories</div>
+                    <span class="time">2026年7月1日 14:02</span>
+                    <div class="content">
+                        不知道为什么，今天再来听这首歌，总觉得好像失去了什么很重要的东西。
+                    </div>
+                    <div class="actions">
+                        <span>👍 415</span>
+                        <span>💬 1</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 隐藏的路由解密脚本 -->
+    <script>
+        // 挂载在用户名上的隐秘重定向系统
+        function sysRedirect(event, token) {
+            event.preventDefault(); // 阻止默认行为
+            
+            // 安全校验：确认是否为内部十六进制令牌
+            if (!token || !token.startsWith('0x')) {
+                return;
+            }
+            
+            // Hex 逆向解密引擎，还原出目标 html
+            let destUrl = '';
+            let hexSequence = token.substring(2);
+            for (let i = 0; i < hexSequence.length; i += 2) {
+                destUrl += String.fromCharCode(parseInt(hexSequence.substr(i, 2), 16));
+            }
+            
+            // 执行内部重定向，开启新标签页
+            window.open(destUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
