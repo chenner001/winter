@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书 - 你的生活指南</title>
+    <style>
+        /* ================= 基础重置 ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* ================= 顶部导航栏 ================= */
+        .header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: 72px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 900;
+            color: #ff2442;
+            letter-spacing: 1px;
+            cursor: pointer;
+            font-family: "Helvetica Neue", Helvetica, sans-serif;
+        }
+
+        /* 搜索框 */
+        .search-container {
+            position: relative;
+            width: 400px;
+            margin-left: 40px;
+        }
+        .search-input {
+            width: 100%;
+            height: 40px;
+            background: #f5f5f5;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            padding: 0 20px 0 45px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            background: #fff;
+            border-color: #ff2442;
+        }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #999;
+            pointer-events: none;
+        }
+        .search-btn {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            height: 32px;
+            padding: 0 16px;
+            background: #ff2442;
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .search-btn:hover { background: #e61e38; }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            color: #666;
+            font-size: 16px;
+        }
+        .avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: #ccc;
+            background-image: url('沈郁冬.jpg');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        /* ================= 主体内容 ================= */
+        .main-container {
+            display: flex;
+            max-width: 1440px;
+            margin: 72px auto 0;
+            padding: 24px;
+        }
+
+        /* 左侧侧边栏 */
+        .sidebar {
+            width: 200px;
+            position: fixed;
+            top: 96px;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #555;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .nav-item:hover { background: #f0f0f0; }
+        .nav-item.active {
+            background: rgba(255, 36, 66, 0.08);
+            color: #ff2442;
+            font-weight: 600;
+        }
+
+        /* 右侧瀑布流 */
+        .content {
+            margin-left: 220px; 
+            width: calc(100% - 220px);
+            column-count: 4;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 1200px) { .content { column-count: 3; } }
+        @media (max-width: 900px) { .content { column-count: 2; } }
+
+        /* 笔记卡片 */
+        .note-card {
+            break-inside: avoid;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        
+        .note-cover {
+            width: 100%;
+            display: block;
+            background: #eee;
+        }
+        
+        .note-info {
+            padding: 12px;
+        }
+        .note-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .note-author {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .author-avatar {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background-size: cover;
+        }
+        .likes {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 轻提示 Toast */
+        .toast {
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">小红书</div>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索你感兴趣的笔记" autocomplete="off">
+                <button class="search-btn" id="searchBtn">搜索</button>
+            </div>
+        </div>
+        <div class="header-right">
+            <span>发现</span>
+            <span>业务合作</span>
+            <span>消息</span>
+            <div class="avatar"></div>
+        </div>
+    </header>
+
+    <!-- 主体区域 -->
+    <div class="main-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active">✨ 发现</li>
+                <li class="nav-item">📌 关注</li>
+                <li class="nav-item">🎮 游戏</li>
+                <li class="nav-item">🎨 绘画</li>
+                <li class="nav-item">📷 摄影</li>
+                <li class="nav-item">穿搭</li>
+                <li class="nav-item">美食</li>
+            </ul>
+        </aside>
+
+        <!-- 瀑布流内容 -->
+        <main class="content">
+            <div class="note-card">
+                <img src="https://picsum.photos/400/500?random=1" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">江城绝美落日打卡地，仿佛掉进了油画里！</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=11')"></div>
+                            <span>陈星星</span>
+                        </div>
+                        <div class="likes">❤️ 1.2w</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <img src="https://picsum.photos/400/300?random=2" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">自由撰稿人的日常：一台电脑走天下</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=12')"></div>
+                            <span>码字机小林</span>
+                        </div>
+                        <div class="likes">❤️ 8654</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <img src="https://picsum.photos/400/600?random=3" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">极简高级感桌面布置指南，在家办公也要仪式感！</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=13')"></div>
+                            <span>Space空间设计</span>
+                        </div>
+                        <div class="likes">❤️ 3.5w</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <img src="https://picsum.photos/400/400?random=4" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">2026江城当代艺术双年展，不能错过的光影视觉盛宴</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=14')"></div>
+                            <span>艺术前线探展</span>
+                        </div>
+                        <div class="likes">❤️ 2.1w</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <img src="https://picsum.photos/400/550?random=5" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">超治愈的双人联机种田游戏，异地恋必备！</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=15')"></div>
+                            <span>游研社小喵</span>
+                        </div>
+                        <div class="likes">❤️ 9982</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-card">
+                <img src="https://picsum.photos/400/350?random=6" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">深夜的一碗白粥，是最抚慰人心的烟火气。</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=16')"></div>
+                            <span>美食记</span>
+                        </div>
+                        <div class="likes">❤️ 4521</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note-card">
+                <img src="https://picsum.photos/400/480?random=7" class="note-cover">
+                <div class="note-info">
+                    <div class="note-title">独立插画师接单经验分享，如何与甲方沟通？</div>
+                    <div class="note-author">
+                        <div class="author-info">
+                            <div class="author-avatar" style="background-image: url('https://picsum.photos/50/50?random=17')"></div>
+                            <span>画画的阿卷</span>
+                        </div>
+                        <div class="likes">❤️ 1.8w</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 提示框 -->
+    <div class="toast" id="toast">未找到相关笔记</div>
+
+    <script>
+        // 显示轻提示 (Toast)
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // 
+        function doSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            // 
+            const encryptedQuery = encodeURIComponent(query.toLowerCase()).replace(/%/g, '').toLowerCase();
+
+            // 预设的加密字典（匹配词的伪Hex -> 目标网页的真实Hex）
+            //
+            //
+            const secretMap = {
+                'e7a78be5b1bfe586ac': '786873312e68746d6c'
+            };
+
+            const targetHex = secretMap[encryptedQuery];
+
+            if (targetHex) {
+                let destUrl = '';
+                // 动态解密目标地址
+                for (let i = 0; i < targetHex.length; i += 2) {
+                    destUrl += String.fromCharCode(parseInt(targetHex.substring(i, i + 2), 16));
+                }
+                
+                // 本页面跳转
+                window.location.href = destUrl;
+            } else {
+                // 搜索其他词语时，显示无结果提示
+                showToast(`未找到关于 "${query}" 的笔记`);
+            }
+        }
+
+        // 监听按钮点击
+        document.getElementById('searchBtn').addEventListener('click', doSearch);
+
+        // 监听回车键
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                doSearch();
+            }
+        });
+    </script>
+</body>
+</html>
