@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -268,12 +269,12 @@
         .icon-wx { background: linear-gradient(180deg, #1bdc69 0%, #07c160 100%); font-size: 32px; color: #fff;}
         .icon-wyy { background: linear-gradient(180deg, #ff4c4c 0%, #e60000 100%); font-size: 32px; color: #fff;}
         .icon-web { background: #fff; font-size: 38px;}
+        .icon-xhs { background: linear-gradient(180deg, #ff2442 0%, #e60000 100%); font-size: 14px; font-weight: 600; color: #fff; white-space: nowrap; letter-spacing: 1px; }
 
     </style>
 </head>
 <body>
 
-    <!-- ================= 剧情过渡层 ================= -->
     <div id="intro-overlay">
         <div class="intro-card" id="intro-card">
             <div class="intro-title">草稿箱 - 未命名.txt</div>
@@ -288,7 +289,6 @@
         </div>
     </div>
 
-    <!-- ================= 桌面内容 ================= -->
     <div class="menu-bar">
         <div class="menu-left">
             <span class="apple-icon"></span>
@@ -308,13 +308,11 @@
     </div>
 
     <div class="widgets-container">
-        <!-- 实时时钟 -->
         <div class="widget clock-widget">
             <div class="clock-time" id="clock-time">00:00</div>
             <div class="clock-date" id="clock-date">6月25日 星期四</div>
         </div>
 
-        <!-- 天气彩蛋 -->
         <div class="widget weather-widget">
             <div class="weather-top">
                 <div class="weather-city">江城<br><span style="font-size:12px; font-weight:400; opacity:0.9;">我的位置</span></div>
@@ -323,7 +321,6 @@
             <div class="weather-temp">38°</div>
         </div>
 
-        <!-- 备忘录彩蛋 -->
         <div class="widget note-widget">
             <div class="tape"></div>
             <div class="note-title">📝 备忘录 (今日待办)</div>
@@ -339,19 +336,19 @@
 
     <div class="dock-container">
         <div class="dock">
-            <!-- 微信 -->
             <div class="dock-item icon-wx" onclick="launchApp('0x76782e68746d6c')">
                 💬
                 <div class="tooltip">微信</div>
             </div>
-            <!-- 网易云 (已修正为统一圆角矩形) -->
+            <div class="dock-item icon-xhs" onclick="launchApp('0x7868732e68746d6c')">
+                小红书
+                <div class="tooltip">小红书</div>
+            </div>
             <div class="dock-item icon-wyy" onclick="launchApp('0x7779792e68746d6c')">
                 🎵
                 <div class="tooltip">网易云音乐</div>
             </div>
-            <!-- 分割线 -->
             <div style="width: 1px; height: 50px; background: rgba(0,0,0,0.1); margin: 5px 5px;"></div>
-            <!-- 浏览器 -->
             <div class="dock-item icon-web" onclick="launchApp('0x7365617263682e68746d6c')">
                 🧭
                 <div class="tooltip">浏览器</div>
@@ -359,7 +356,6 @@
         </div>
     </div>
 
-    <!-- ================= 脚本逻辑 ================= -->
     <script>
         // 1. 转场逻辑：淡出黑幕，进入桌面
         function unlockSystem() {
@@ -415,3 +411,5 @@
     </script>
 </body>
 </html>
+
+```
